@@ -34,7 +34,6 @@ process.nextTick(function() {
     scene.add(sunLight)
 
     scene.add(new THREE.AmbientLight(0x202020))
-    //scene.add(new THREE.AxisHelper(10))
 
     camera.position.set(0, 250, 300)
     renderer.setSize(width, height)
@@ -50,24 +49,10 @@ process.nextTick(function() {
       , line_mat = new THREE.LineBasicMaterial({ color: 0xf8f8f8, linewidth: 2.0 })
       , normal = new THREE.Vector3(0, 1, 0)
 
-    // tile outline
-    // var bbox = [ [0, 1, 0], [256, 1, 0], [256, 1, 256], [0, 1, 256], [0, 1, 0] ]
-    // for (var i = 0, il = bbox.length - 1; i<il; i++) {
-    //   var v1 = bbox[i]
-    //     , v2 = bbox[i+1]
-    //   geo = new THREE.Geometry()
-    //   geo.vertices.push(
-    //     new THREE.Vector3(v1[0], v1[1], v1[2]),
-    //     new THREE.Vector3(v2[0], v2[1], v2[2])
-    //   )
-    //   line = new THREE.Line(geo, line_mat)
-    //   scene.add(line)
-    // }
-
     var tile = map_tile.create(1, 1)
     console.log('Tile:', tile)
 
-// @TODO: tile.nodes.draw()
+    // @TODO: move all tile rendering code into -> `tile.nodes.draw()`
 
     // voronoi regions (lines)
     var offset = -128
@@ -90,9 +75,6 @@ process.nextTick(function() {
 
         half_edges.forEach(function(half_edge) {
           var edge = half_edge.edge
-
-          // @TODO: implement searching all neighbors for water
-          //        also lower the elevation of neighboring regions around water ?
 
           // test for nearby water
           if (! node.water) {
@@ -132,10 +114,11 @@ process.nextTick(function() {
           , elevation = parseInt(tile.nodes[site.voronoiId].position.y / 10 * 3)
           , moisture  = parseInt(tile.nodes[site.voronoiId].moisture / 100 * 5)
 
-        // set water filled regions
-        if (node.water) color.set(0x0000f8)
-        else if (node.moisture > 70 && next_to_water) color.set(0x4F86F7)
-        else color.set(parseInt(biomes[elevation][moisture]), 16)
+        color.set(parseInt(biomes[elevation][moisture]), 16)
+
+        // add color for water filled regions
+        // if (node.water) color.set(0x0000f8)
+        // else if (node.moisture > 70 && next_to_water) color.set(0x4F86F7)
 
         // render filled polygon
         var poly_mat = new THREE.MeshBasicMaterial({ color: color })
@@ -149,7 +132,7 @@ process.nextTick(function() {
 
       } else {
 
-        // show boundary regions
+        // show boundary regions (as only outlines)
         half_edges.forEach(function(half_edge) {
           var edge = half_edge.edge
 
@@ -164,18 +147,6 @@ process.nextTick(function() {
         })
       }
     })
-
-    // poisson disc samples (points)
-    // var tile_id = parseInt(Math.random() * tile.nodes.length)
-    // tile.nodes[tile_id].neighbors.forEach(function(node_id) {
-    //   var node = tile.nodes[node_id]
-    //     , offset = -128
-    //   sphere = new THREE.Mesh(new THREE.SphereGeometry(1.5, 32, 32), sphere_mat)
-    //   sphere.position.set(node.position.x + offset, 1, node.position.z + offset)
-    //   scene.add(sphere)
-    // })
-    // DEBUG:
-    // console.log('tile '+ tile_id +' has '+ tile.nodes[tile_id].neighbors.length +' neighbors:', tile.nodes[tile_id].neighbors)
 
     // animation.
     raf(renderer.domElement).on('data', function(dt) {
