@@ -52,14 +52,14 @@ process.nextTick(function() {
     var tile = map_tile.create(1, 1)
     console.log('Tile:', tile)
 
-    // @TODO: move all tile rendering code into -> `tile.nodes.draw()`
+    // @TODO: move all tile rendering code into -> `tile.regions.draw()`
 
     // voronoi regions (lines)
     var offset = -128
-    tile.regions.cells.forEach(function(cell) {
+    tile.voronoi_regions.cells.forEach(function(cell) {
       var site = cell.site
-        , node = tile.nodes[site.voronoiId]
-        , cell_origin = new THREE.Vector3(node.position.x + offset, /*node.position.y*/ 1, node.position.z + offset)
+        , node = tile.regions[site.voronoiId]
+        , cell_origin = new THREE.Vector3(node.center.position.x + offset, /*node.center.position.y*/ 1, node.center.position.z + offset)
         , half_edges = cell.halfedges
         , num_verts = 0
 
@@ -78,8 +78,8 @@ process.nextTick(function() {
 
           // test for nearby water
           if (! node.water) {
-            var lSite = tile.nodes[edge.lSite.voronoiId]
-              , rSite = tile.nodes[edge.rSite.voronoiId]
+            var lSite = tile.regions[edge.lSite.voronoiId]
+              , rSite = tile.regions[edge.rSite.voronoiId]
             if (lSite.water || rSite.water)
               next_to_water = true
           }
@@ -111,8 +111,8 @@ process.nextTick(function() {
 
         // calculate biome for each node
         var color = new THREE.Color()
-          , elevation = parseInt(tile.nodes[site.voronoiId].position.y / 10 * 3)
-          , moisture  = parseInt(tile.nodes[site.voronoiId].moisture / 100 * 5)
+          , elevation = parseInt(tile.regions[site.voronoiId].center.position.y / 10 * 3)
+          , moisture  = parseInt(tile.regions[site.voronoiId].moisture / 100 * 5)
 
         color.set(parseInt(biomes[elevation][moisture]), 16)
 
