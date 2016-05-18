@@ -30,15 +30,19 @@ process.nextTick(function() {
     scene.add(sun_light)
     scene.add(new THREE.AmbientLight(0x202020))
 
-    camera.position.set(0, 250, 300)
+    camera.position.set(0, 500, 800)
     renderer.setSize(width, height)
 
     document.body.appendChild(renderer.domElement)
     window.addEventListener('resize', resize, false)
 
-    var tile = map_tile.create(0, 0)
-    scene.add(tile.render(THREE))
-    //console.log('Tile:', tile)
+    for (var y = -1, yl = 1; y <= yl; y++) {
+      for (var x = -1, xl = 1; x <= xl; x++) {
+        var tile = map_tile.create(x, y)
+        scene.add(tile.render(THREE))
+        console.log('new tile: ['+ tile.grid.position.x +', '+ tile.grid.position.y +'] generated in '+ tile.exec_time +'ms')
+      }
+    }
 
     // animation.
     raf(renderer.domElement).on('data', function(dt) {
