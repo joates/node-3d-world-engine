@@ -13,7 +13,8 @@ results
 
 npm-debug.log
 __archives
-assets
+db/*
+!db/.gitkeep
 node_modules
 public/js/main.js
 public/favicon.ico

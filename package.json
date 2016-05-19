@@ -5,7 +5,7 @@
   "main": "./src/index.js",
   "scripts": {
     "build": "browserify src/index.js -o public/js/main.js",
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "domready": "^1.0.8",
@@ -13,5 +13,10 @@
     "raf-stream": "^3.0.0",
     "voronoi": "~1.0.0",
     "poisson-disc-sampler": "~1.1.0"
+  },
+  "dev-dependencies": {
+    "levelup": "~0.19.1",
+    "express": "~4.13.4",
+    "socket.io": "~1.4.6"
   }
 }
