@@ -1,6 +1,6 @@
 {
   "name": "n3d-world-engine",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "3D World",
   "main": "./src/index.js",
   "scripts": {
@@ -16,6 +16,7 @@
   },
   "dev-dependencies": {
     "levelup": "~0.19.1",
+    "level-sublevel": "~6.5.4",
     "express": "~4.13.4",
     "socket.io": "~1.4.6"
   }

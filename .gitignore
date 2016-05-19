@@ -13,8 +13,8 @@ results
 
 npm-debug.log
 __archives
-db/*
-!db/.gitkeep
+db/world/*
+!db/world/.gitkeep
 node_modules
 public/js/main.js
 public/favicon.ico

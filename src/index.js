@@ -5,16 +5,15 @@ var domready = require('domready')
   , width  = window.innerWidth
   , height = window.innerHeight
   , THREE  = require('n3d-threejs')
-  , map_tile = require('../lib/Tile')
+  , Tile = require('../lib/client/Tile')
 
 // on-demand map tile generation
 var socket = io.connect('http://localhost:8000')
-socket.on('map_tile', function(tile) { 
-  console.log('map tile:', tile.key)
-  if (scene && THREE) scene.add(map_tile.render(tile, THREE))
+socket.on('new_tile', function(tile) {
+  scene.add(Tile.render(tile, THREE))
 })
 
-require('../lib/myOrbitControls')(THREE)
+require('../lib/client/myOrbitControls')(THREE)
 
 // define the scene graph
 var scene    = new THREE.Scene()
@@ -44,15 +43,13 @@ process.nextTick(function() {
     window.addEventListener('resize', resize, false)
 
     // display a grid of map tiles
-    // Note: map tiles are either fetched from db
-    //       OR generated on-the-fly by request
     for (var y = -1, yl = 1; y <= yl; y++) {
       for (var x = -1, xl = 1; x <= xl; x++) {
-        socket.emit('get_map_tile', x, y)
+        socket.emit('get_tile', x, y)
       }
     }
 
-    // animation.
+    // start the animation loop
     raf(renderer.domElement).on('data', function(dt) {
       update(dt)
       render()
@@ -60,7 +57,7 @@ process.nextTick(function() {
   })
 })
 
-// helpers
+
 function update(dt) {
   camera.lookAt(scene.position)
   controls.update()
