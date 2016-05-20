@@ -43,8 +43,8 @@ process.nextTick(function() {
     window.addEventListener('resize', resize, false)
 
     // display a grid of map tiles
-    for (var y = -1, yl = 1; y <= yl; y++) {
-      for (var x = -1, xl = 1; x <= xl; x++) {
+    for (var y = -1; y <= 1; y++ ) {
+      for (var x = -1; x <= 1; x++) {
         socket.emit('get_tile', x, y)
       }
     }
