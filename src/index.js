@@ -9,8 +9,9 @@ var domready = require('domready')
 
 // on-demand map tile generation
 var socket = io.connect('http://localhost:8000')
-socket.on('new_tile', function(tile) {
-  scene.add(Tile.render(tile, THREE))
+socket.on('new_tile', function(map_tile) {
+  scene.add(Tile.render(map_tile, THREE))
+  //console.log(map_tile.key, map_tile)
 })
 
 require('../lib/client/myOrbitControls')(THREE)
@@ -36,7 +37,7 @@ process.nextTick(function() {
     scene.add(sun_light)
     scene.add(new THREE.AmbientLight(0x202020))
 
-    camera.position.set(0, 500, 800)
+    camera.position.set(0, 800, 1000)
     renderer.setSize(width, height)
 
     document.body.appendChild(renderer.domElement)
@@ -56,7 +57,6 @@ process.nextTick(function() {
     })
   })
 })
-
 
 function update(dt) {
   camera.lookAt(scene.position)

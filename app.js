@@ -19,7 +19,8 @@ io.sockets.on('connection', function(socket) {
 
   // new map tile requested
   socket.on('get_tile', function(x, y) {
-    World.get('map_tile', [x, y], function(tile) {
+    World.get('map_tile', [x, y], function(err, tile) {
+      if (err) console.error('app::socket_get_tile::World.get ->', err)
       socket.emit('new_tile', tile)
     })
   })
