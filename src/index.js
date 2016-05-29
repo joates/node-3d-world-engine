@@ -5,12 +5,23 @@ var domready = require('domready')
   , width  = window.innerWidth
   , height = window.innerHeight
   , THREE  = require('n3d-threejs')
-  , Tile = require('../lib/client/Tile')
+  , world_map = require('../lib/client/World-Map')
+  , scene_objects = {}
 
 // on-demand map tile generation
 var socket = io.connect('http://localhost:8000')
 socket.on('new_tile', function(map_tile) {
-  scene.add(Tile.render(map_tile, THREE))
+  var tile = world_map.render(map_tile, THREE)
+
+  if (scene_objects[map_tile.key]) {
+    scene.children.forEach(function(child, idx) {
+      if (child.uuid === scene_objects[map_tile.key])
+        scene.children.splice(idx, 1)
+    })
+  }
+
+  scene_objects[map_tile.key] = tile.uuid
+  scene.add(tile)
   //console.log(map_tile.key, map_tile)
 })
 
@@ -37,7 +48,7 @@ process.nextTick(function() {
     scene.add(sun_light)
     scene.add(new THREE.AmbientLight(0x202020))
 
-    camera.position.set(0, 800, 1000)
+    camera.position.set(0, 600, 800)
     renderer.setSize(width, height)
 
     document.body.appendChild(renderer.domElement)
