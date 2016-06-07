@@ -1,13 +1,25 @@
 ## 3D World Engine
 
-...it generates a new map tile
+__Note: use v1.3.0+__
+
+1. renders a grid of procedurally generated map tiles
+  * each map tile is defined as a number of voronoi regions
+  * requires the [Three.js](https://github.com/mrdoob/three.js) library (_located at_ ```public/js/threejs```)
+
 
 #### getting started
 
 * ```npm install``` (_this will download the module dependencies_)
-* ```npm run build && npm start```
+* ```npm run clean && npm start```
 
 Once the server is started, the demo application is located on your local system at [localhost:8000](http://localhost:8000/)
+
+
+#### example
+
+here is a 3x3 grid of map tiles
+
+![Screenshot](https://raw.github.com/joates/node-3d-world-engine/master/3x3-grid.png)
 
 
 #### License
@@ -15,7 +27,7 @@ Once the server is started, the demo application is located on your local system
 ```
 The MIT License (MIT)
 
-Copyright (c) 2016 Julian Oates
+Copyright (c) 2016 @joat_es (http://joat.es)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

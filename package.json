@@ -1,16 +1,14 @@
 {
   "name": "n3d-world-engine",
-  "version": "1.2.0",
-  "description": "3D World",
-  "main": "./src/index.js",
+  "version": "1.3.0",
+  "description": "3d world generator",
+  "main": "./src/app.js",
   "scripts": {
-    "build": "browserify src/index.js -o public/js/main.js",
-    "start": "node app.js"
+    "clean": "rm -rf db/world/*",
+    "start": "node src/app.js"
   },
   "dependencies": {
-    "domready": "^1.0.8",
     "n3d-threejs": "^76.0.0",
-    "raf-stream": "^3.0.0",
     "voronoi": "~1.0.0",
     "poisson-disc-sampler": "~1.1.0",
     "async": "~2.0.0-rc.5",
@@ -21,5 +19,13 @@
     "level-sublevel": "~6.5.4",
     "express": "~4.13.4",
     "socket.io": "~1.4.6"
-  }
+  },
+  "keywords": [
+    "game",
+    "webgl",
+    "three.js",
+    "3d"
+  ],
+  "author": "@joat_es (http://joat.es)",
+  "license": "MIT"
 }
