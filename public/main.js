@@ -10,16 +10,17 @@ var width  = window.innerWidth
 var socket = io.connect('http://localhost:8000')
 socket.on('new_tile', function(tile) {
   var tile_mesh = build_mesh(tile.mesh_data, tile.grid.position)
+
   if (scene_objects[tile.key]) {
     scene.children.forEach(function(child, idx) {
       if (child.uuid === scene_objects[tile.key])
         scene.children.splice(idx, 1)
     })
   }
+  else console.log('tile id: ['+ tile.key +']', tile.flags.welded_edges, tile)
+
   scene_objects[tile.key] = tile_mesh.uuid
   scene.add(tile_mesh)
-  //console.log('['+ tile.key +']', tile)
-
 })
 
 // define the scene graph
