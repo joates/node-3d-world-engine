@@ -17,10 +17,24 @@ socket.on('new_tile', function(tile) {
         scene.children.splice(idx, 1)
     })
   }
-  else console.log('tile id: ['+ tile.key +']', tile.flags.welded_edges, tile)
 
   scene_objects[tile.key] = tile_mesh.uuid
   scene.add(tile_mesh)
+
+  // DEBUG:
+  if (tile.key === '00001_00001' && tile.flags.welded_edges === 15) {
+    console.log('['+ tile.key +']', tile)
+    tile.regions.forEach(function(region, region_id) {
+      if (region.flags.type & 4) {  // is_welded
+        region.edges.forEach(function(edge, edge_id) {
+          if ( typeof edge.delaunay_neighbor !== 'string'
+            || edge.delaunay_neighbors_edge_id === undefined ) console.error('region:', region_id, 'edge:', edge_id, 'encoding error !!')
+        })
+      }
+    })
+  }
+  //
+
 })
 
 // define the scene graph
