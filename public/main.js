@@ -32,10 +32,15 @@ socket.on('new_tile', function(tile) {
     tile.regions.forEach(function(region, region_id) {
       if (region.flags.type & 4) {  // is_welded
         region.edges.forEach(function(edge, edge_id) {
-          if ( typeof edge.delaunay_neighbor !== 'string')
+
+          if (typeof edge.delaunay_neighbor !== 'string')
             num_unencoded_neighbors++
-          if (edge.delaunay_neighbors_edge_id === undefined)
+
+          if (edge.delaunay_neighbors_edge_id === undefined) {
+            console.error('['+ tile.key +']', 'region', region_id, 'edge', edge_id, '\ndebug:', edge)
             num_unencoded_edges++
+          }
+
         })
       }
     })
