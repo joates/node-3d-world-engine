@@ -6,15 +6,10 @@ var width  = window.innerWidth
   , welded_outline_material = new THREE.LineBasicMaterial({ color: 0x2020fa, linewidth: 2.0 })
   , scene_objects = {}
 
-// DEBUG:
-var num_unencoded_neighbors = 0
-  , num_unencoded_edges = 0
-  , num_tiles = 0
-
 // on-demand map tile generation
 var socket = io.connect('http://localhost:8000')
 socket.on('new_tile', function(tile) {
-  var tile_mesh = build_mesh(tile.mesh_data, tile.grid.position)
+  var tile_mesh = build_mesh(tile.mesh_data, tile.grid_position)
 
   if (scene_objects[tile.key]) {
     scene.children.forEach(function(child, idx) {
@@ -25,30 +20,6 @@ socket.on('new_tile', function(tile) {
 
   scene_objects[tile.key] = tile_mesh.uuid
   scene.add(tile_mesh)
-
-  // DEBUG:
-  if (num_tiles > 18 && tile.key === '00001_00001' && tile.flags.welded_edges === 15) {
-    console.log('['+ tile.key +']', tile)
-    tile.regions.forEach(function(region, region_id) {
-      if (region.flags.type & 4) {  // is_welded
-        region.edges.forEach(function(edge, edge_id) {
-
-          if (typeof edge.delaunay_neighbor !== 'string')
-            num_unencoded_neighbors++
-
-          if (edge.delaunay_neighbors_edge_id === undefined) {
-            console.error('['+ tile.key +']', 'region', region_id, 'edge', edge_id, '\ndebug:', edge)
-            num_unencoded_edges++
-          }
-
-        })
-      }
-    })
-    console.error('unencoded: \n   delaunay neighbors', num_unencoded_neighbors, '\n   delaunay neighbors edges', num_unencoded_edges)
-  }
-  num_tiles++
-  //
-
 })
 
 // define the scene graph
